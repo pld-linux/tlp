@@ -1,11 +1,11 @@
 Summary:	Power management tool for Linux
 Name:		tlp
-Version:	0.3.8.1
-Release:	0.1
+Version:	0.3.9
+Release:	1
 License:	GPL v2
 Group:		Base
-Source0:	https://github.com/linrunner/TLP/archive/%{version}.tar.gz
-# Source0-md5:	39d3b3d677f1f5ed2a6fbfd8b1ed5cda
+Source0:	https://github.com/linrunner/TLP/archive/%{version}.tar.gz?/%{name}-%{version}.tar.gz
+# Source0-md5:	910e2d16d669a782021c510952129505
 Source1:	%{name}.tmpfiles
 URL:		http://linrunner.de/en/tlp/tlp.html
 Requires:	acpid
@@ -14,6 +14,7 @@ Requires:	hdparm
 Requires:	pm-utils
 Requires:	rfkill
 Requires:	wireless-tools
+Suggests:	bash-completion-%{name}
 Suggests:	smartmontools
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -21,6 +22,14 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 TLP is a power management tool for Linux. It brings you the benefits
 of advanced power management without the need to understand every
 technical detail.
+
+%package -n bash-completion-%{name}
+Summary:	bash-completion for tlp
+Group:		Applications/Shells
+Requires:	bash-completion
+
+%description -n bash-completion-%{name}
+This package provides bash-completion for tlp.
 
 %prep
 %setup -q -n TLP-%{version}
@@ -41,7 +50,7 @@ rm -rf $RPM_BUILD_ROOT
 	CONFFILE=$RPM_BUILD_ROOT%{_sysconfdir}/default/tlp
 
 install -d $RPM_BUILD_ROOT%{_mandir}/{man1,man8} $RPM_BUILD_ROOT%{systemdtmpfilesdir} \
-	$RPM_BUILD_ROOT%{systemdunitdir} $RPM_BUILD_ROOT%{_varrun}/%{name} 
+	$RPM_BUILD_ROOT%{systemdunitdir} $RPM_BUILD_ROOT%{_varrun}/%{name}
 install man/bluetooth.1 man/run-on-ac.1 man/run-on-bat.1 man/wifi.1 \
 	man/wwan.1 $RPM_BUILD_ROOT%{_mandir}/man1
 install man/tlp.8 man/tlp-stat.8 $RPM_BUILD_ROOT%{_mandir}/man8
@@ -95,3 +104,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/tlp.8*
 %{_mandir}/man8/tlp-stat.8*
 %attr(755,root,root) %{_sbindir}/tlp
+
+%files -n bash-completion-%{name}
+%defattr(644,root,root,755)
+/etc/bash_completion.d/*
