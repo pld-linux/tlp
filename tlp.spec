@@ -44,7 +44,7 @@ rm -rf $RPM_BUILD_ROOT
 	PMETC=$RPM_BUILD_ROOT%{_sysconfdir}/pm/power.d \
 	TLIB=$RPM_BUILD_ROOT%{_libdir}/tlp-pm \
 	PLIB=$RPM_BUILD_ROOT%{_libdir}/pm-utils \
-	ULIB=$RPM_BUILD_ROOT%/lib/udev \
+	ULIB=$RPM_BUILD_ROOT/lib/udev \
 	ACPI=$RPM_BUILD_ROOT%{_sysconfdir}/acpi \
 	NMDSP=$RPM_BUILD_ROOT%{_sysconfdir}/NetworkManager/dispatcher.d \
 	CONFFILE=$RPM_BUILD_ROOT%{_sysconfdir}/default/tlp
