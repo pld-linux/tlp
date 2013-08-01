@@ -1,3 +1,8 @@
+# TODO
+# - unpackaged:
+# /etc/init.d/tlp
+# /lib/udev/rules.d/40-tlp.rules
+# /lib/udev/tlp-usb-udev
 Summary:	Power management tool for Linux
 Name:		tlp
 Version:	0.3.9
@@ -36,28 +41,24 @@ This package provides bash-completion for tlp.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
 %{__make} install-tlp \
 	DESTDIR=$RPM_BUILD_ROOT \
 	SBIN=$RPM_BUILD_ROOT%{_sbindir} \
 	BIN=$RPM_BUILD_ROOT%{_bindir} \
-	PMETC=$RPM_BUILD_ROOT%{_sysconfdir}/pm/power.d \
+	PMETC=$RPM_BUILD_ROOT/etc/pm/power.d \
 	TLIB=$RPM_BUILD_ROOT%{_libdir}/tlp-pm \
 	PLIB=$RPM_BUILD_ROOT%{_libdir}/pm-utils \
 	ULIB=$RPM_BUILD_ROOT/lib/udev \
-	ACPI=$RPM_BUILD_ROOT%{_sysconfdir}/acpi \
-	NMDSP=$RPM_BUILD_ROOT%{_sysconfdir}/NetworkManager/dispatcher.d \
-	CONFFILE=$RPM_BUILD_ROOT%{_sysconfdir}/default/tlp
+	ACPI=$RPM_BUILD_ROOT/etc/acpi \
+	NMDSP=$RPM_BUILD_ROOT/etc/NetworkManager/dispatcher.d \
+	CONFFILE=$RPM_BUILD_ROOT/etc/default/tlp
 
-install -d $RPM_BUILD_ROOT%{_mandir}/{man1,man8} $RPM_BUILD_ROOT%{systemdtmpfilesdir} \
-	$RPM_BUILD_ROOT%{systemdunitdir} $RPM_BUILD_ROOT%{_varrun}/%{name}
-install man/bluetooth.1 man/run-on-ac.1 man/run-on-bat.1 man/wifi.1 \
-	man/wwan.1 $RPM_BUILD_ROOT%{_mandir}/man1
-install man/tlp.8 man/tlp-stat.8 $RPM_BUILD_ROOT%{_mandir}/man8
+install -d $RPM_BUILD_ROOT{%{_mandir}/{man1,man8},%{systemdtmpfilesdir},%{systemdunitdir},%{_varrun}/%{name}}
+cp -p man/{bluetooth,run-on-ac,run-on-bat,wifi,wwan}.1 $RPM_BUILD_ROOT%{_mandir}/man1
+cp -p man/{tlp,tlp-stat}.8 $RPM_BUILD_ROOT%{_mandir}/man8
 
-install tlp.service $RPM_BUILD_ROOT%{systemdunitdir}
-
-install %{SOURCE1} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
+cp -p tlp.service $RPM_BUILD_ROOT%{systemdunitdir}
+cp -p %{SOURCE1} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -74,8 +75,9 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc README
-%dir %{_libdir}/tlp-pm
-%dir %{_varrun}/%{name}
+/etc/acpi/events/thinkpad-radiosw
+%attr(755,root,root) /etc/acpi/thinkpad-radiosw.sh
+%config(noreplace) %verify(not md5 mtime size) /etc/default/tlp
 %attr(755,root,root) %{_bindir}/bluetooth
 %attr(755,root,root) %{_bindir}/run-on-ac
 %attr(755,root,root) %{_bindir}/run-on-bat
@@ -84,18 +86,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/tlp-usblist
 %attr(755,root,root) %{_bindir}/wifi
 %attr(755,root,root) %{_bindir}/wwan
-%{_sysconfdir}/acpi/events/thinkpad-radiosw
-%{_sysconfdir}/acpi/thinkpad-radiosw.sh
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/default/tlp
-%{systemdtmpfilesdir}/%{name}.conf
-%{systemdunitdir}/tlp.service
-%attr(755,root,root) %{_libdir}/pm-utils/power.d/zztlp
-%attr(755,root,root) %{_libdir}/pm-utils/sleep.d/49bay
-%attr(755,root,root) %{_libdir}/pm-utils/sleep.d/49wwan
-%attr(755,root,root) %{_libdir}/tlp-pm/tlp-functions
-%attr(755,root,root) %{_libdir}/tlp-pm/tlp-nop
-%attr(755,root,root) %{_libdir}/tlp-pm/tlp-rf-func
-%attr(755,root,root) %{_libdir}/tlp-pm/tpacpi-bat
+%attr(755,root,root) %{_sbindir}/tlp
 %{_mandir}/man1/bluetooth.1*
 %{_mandir}/man1/run-on-ac.1*
 %{_mandir}/man1/run-on-bat.1*
@@ -103,7 +94,17 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/wwan.1*
 %{_mandir}/man8/tlp.8*
 %{_mandir}/man8/tlp-stat.8*
-%attr(755,root,root) %{_sbindir}/tlp
+%attr(755,root,root) %{_libdir}/pm-utils/power.d/zztlp
+%attr(755,root,root) %{_libdir}/pm-utils/sleep.d/49bay
+%attr(755,root,root) %{_libdir}/pm-utils/sleep.d/49wwan
+%dir %{_libdir}/tlp-pm
+%attr(755,root,root) %{_libdir}/tlp-pm/tlp-functions
+%attr(755,root,root) %{_libdir}/tlp-pm/tlp-nop
+%attr(755,root,root) %{_libdir}/tlp-pm/tlp-rf-func
+%attr(755,root,root) %{_libdir}/tlp-pm/tpacpi-bat
+%{systemdtmpfilesdir}/%{name}.conf
+%{systemdunitdir}/tlp.service
+%dir %{_varrun}/%{name}
 
 %files -n bash-completion-%{name}
 %defattr(644,root,root,755)
