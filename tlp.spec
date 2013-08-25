@@ -1,16 +1,14 @@
 # TODO
 # - unpackaged:
 # /etc/init.d/tlp
-# /lib/udev/rules.d/40-tlp.rules
-# /lib/udev/tlp-usb-udev
 Summary:	Power management tool for Linux
 Name:		tlp
-Version:	0.3.9
+Version:	0.3.10.1
 Release:	1
 License:	GPL v2
 Group:		Base
 Source0:	https://github.com/linrunner/TLP/archive/%{version}.tar.gz?/%{name}-%{version}.tar.gz
-# Source0-md5:	910e2d16d669a782021c510952129505
+# Source0-md5:	38c05b11e9c77838f263c4ae5fd45788
 Source1:	%{name}.tmpfiles
 URL:		http://linrunner.de/en/tlp/tlp.html
 Requires:	acpid
@@ -78,6 +76,8 @@ rm -rf $RPM_BUILD_ROOT
 /etc/acpi/events/thinkpad-radiosw
 %attr(755,root,root) /etc/acpi/thinkpad-radiosw.sh
 %config(noreplace) %verify(not md5 mtime size) /etc/default/tlp
+/lib/udev/rules.d/40-tlp.rules
+/lib/udev/tlp-usb-udev
 %attr(755,root,root) %{_bindir}/bluetooth
 %attr(755,root,root) %{_bindir}/run-on-ac
 %attr(755,root,root) %{_bindir}/run-on-bat
@@ -94,9 +94,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/wwan.1*
 %{_mandir}/man8/tlp.8*
 %{_mandir}/man8/tlp-stat.8*
-%attr(755,root,root) %{_libdir}/pm-utils/power.d/zztlp
-%attr(755,root,root) %{_libdir}/pm-utils/sleep.d/49bay
-%attr(755,root,root) %{_libdir}/pm-utils/sleep.d/49wwan
+%attr(755,root,root) %{_libdir}/pm-utils/sleep.d/49tlp
 %dir %{_libdir}/tlp-pm
 %attr(755,root,root) %{_libdir}/tlp-pm/tlp-functions
 %attr(755,root,root) %{_libdir}/tlp-pm/tlp-nop
