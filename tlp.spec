@@ -30,6 +30,9 @@ technical detail.
 Summary:	bash-completion for tlp
 Group:		Applications/Shells
 Requires:	bash-completion
+%if "%{_rpmversion}" >= "5"
+BuildArch:	noarch
+%endif
 
 %description -n bash-completion-%{name}
 This package provides bash-completion for tlp.
