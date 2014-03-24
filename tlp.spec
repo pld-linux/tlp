@@ -3,12 +3,12 @@
 # /etc/init.d/tlp
 Summary:	Power management tool for Linux
 Name:		tlp
-Version:	0.4.1
+Version:	0.5
 Release:	1
 License:	GPL v2
 Group:		Base
 Source0:	https://github.com/linrunner/TLP/archive/%{version}.tar.gz?/%{name}-%{version}.tar.gz
-# Source0-md5:	43cb7a875e4237cbb1392294585ccc4f
+# Source0-md5:	93b2162cb278b3b5757d701edf2e1f7a
 Source1:	%{name}.tmpfiles
 URL:		http://linrunner.de/en/tlp/tlp.html
 Requires:	acpid
@@ -44,15 +44,14 @@ This package provides bash-completion for tlp.
 rm -rf $RPM_BUILD_ROOT
 %{__make} install-tlp \
 	DESTDIR=$RPM_BUILD_ROOT \
-	SBIN=$RPM_BUILD_ROOT%{_sbindir} \
-	BIN=$RPM_BUILD_ROOT%{_bindir} \
-	PMETC=$RPM_BUILD_ROOT/etc/pm/power.d \
-	TLIB=$RPM_BUILD_ROOT%{_libdir}/tlp-pm \
-	PLIB=$RPM_BUILD_ROOT%{_libdir}/pm-utils \
-	ULIB=$RPM_BUILD_ROOT/lib/udev \
-	ACPI=$RPM_BUILD_ROOT/etc/acpi \
-	NMDSP=$RPM_BUILD_ROOT/etc/NetworkManager/dispatcher.d \
-	CONFFILE=$RPM_BUILD_ROOT/etc/default/tlp
+	TLP_SBIN=%{_sbindir} \
+	TLP_BIN=%{_bindir} \
+	TLP_TLIB=%{_libdir}/tlp-pm \
+	TLP_PLIB=%{_libdir}/pm-utils \
+	TLP_ULIB=/lib/udev \
+	TLP_ACPI=/etc/acpi \
+	TLP_NMDSP=/etc/NetworkManager/dispatcher.d \
+	TLP_CONF=/etc/default/tlp
 
 install -d $RPM_BUILD_ROOT{%{_mandir}/{man1,man8},%{systemdtmpfilesdir},%{systemdunitdir},%{_varrun}/%{name}}
 cp -p man/{bluetooth,run-on-ac,run-on-bat,wifi,wwan}.1 $RPM_BUILD_ROOT%{_mandir}/man1
