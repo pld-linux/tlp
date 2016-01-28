@@ -4,7 +4,7 @@
 Summary:	Power management tool for Linux
 Name:		tlp
 Version:	0.8
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Base
 Source0:	https://github.com/linrunner/TLP/archive/%{version}.tar.gz?/%{name}-%{version}.tar.gz
@@ -59,17 +59,17 @@ install -d $RPM_BUILD_ROOT{%{_mandir}/{man1,man8},%{systemdtmpfilesdir},%{system
 cp -p man/{bluetooth,run-on-ac,run-on-bat,wifi,wwan}.1 $RPM_BUILD_ROOT%{_mandir}/man1
 cp -p man/{tlp,tlp-stat}.8 $RPM_BUILD_ROOT%{_mandir}/man8
 
-cp -p tlp.service $RPM_BUILD_ROOT%{systemdunitdir}
+cp -p tlp.service tlp-sleep.service $RPM_BUILD_ROOT%{systemdunitdir}
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %post
-%systemd_post tlp.service
+%systemd_post tlp.service tlp-sleep.service
 
 %preun
-%systemd_preun tlp.service
+%systemd_preun tlp.service tlp-sleep.service
 
 %postun
 %systemd_reload
@@ -106,6 +106,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/tlp-pm/tpacpi-bat
 %{systemdtmpfilesdir}/%{name}.conf
 %{systemdunitdir}/tlp.service
+%{systemdunitdir}/tlp-sleep.service
 %dir %{_varrun}/%{name}
 
 %files -n bash-completion-%{name}
