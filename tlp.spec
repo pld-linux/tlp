@@ -3,12 +3,12 @@
 # /etc/init.d/tlp
 Summary:	Power management tool for Linux
 Name:		tlp
-Version:	0.8
-Release:	2
+Version:	0.9
+Release:	1
 License:	GPL v2
 Group:		Base
 Source0:	https://github.com/linrunner/TLP/archive/%{version}.tar.gz?/%{name}-%{version}.tar.gz
-# Source0-md5:	d53ef993ce96ccff904d6caad1f14006
+# Source0-md5:	952712c5de56e5fcb9a165b1cd8ba4e0
 Source1:	%{name}.tmpfiles
 URL:		http://linrunner.de/en/tlp/tlp.html
 BuildRequires:	rpmbuild(macros) >= 1.673
@@ -77,8 +77,6 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc README
-/etc/acpi/events/thinkpad-radiosw
-%attr(755,root,root) /etc/acpi/thinkpad-radiosw.sh
 %config(noreplace) %verify(not md5 mtime size) /etc/default/tlp
 /lib/udev/rules.d/85-tlp.rules
 %attr(755,root,root) /lib/udev/tlp-usb-udev
@@ -111,4 +109,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n bash-completion-%{name}
 %defattr(644,root,root,755)
+%{bash_compdir}/bluetooth
 %{bash_compdir}/tlp
+%{bash_compdir}/tlp-stat
+%{bash_compdir}/wifi
+%{bash_compdir}/wwan
