@@ -4,7 +4,7 @@
 Summary:	Power management tool for Linux
 Name:		tlp
 Version:	1.0
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Base
 Source0:	https://github.com/linrunner/TLP/archive/%{version}.tar.gz?/%{name}-%{version}.tar.gz
@@ -16,7 +16,7 @@ Requires:	acpid
 Requires:	ethtool
 Requires:	hdparm
 Requires:	pm-utils
-Requires:	rfkill
+Requires:	util-linux >= 2.31
 Requires:	wireless-tools
 Suggests:	bash-completion-%{name}
 Suggests:	smartmontools
