@@ -3,12 +3,12 @@
 # /etc/init.d/tlp
 Summary:	Power management tool for Linux
 Name:		tlp
-Version:	1.0
-Release:	2
+Version:	1.2.1
+Release:	1
 License:	GPL v2
 Group:		Base
 Source0:	https://github.com/linrunner/TLP/archive/%{version}.tar.gz?/%{name}-%{version}.tar.gz
-# Source0-md5:	2219dbf7e7aec9c5a31d1b5b6e284507
+# Source0-md5:	6bb4404a3ad83905fe8feaed87bad33c
 Source1:	%{name}.tmpfiles
 URL:		http://linrunner.de/en/tlp/tlp.html
 BuildRequires:	rpmbuild(macros) >= 1.673
@@ -47,10 +47,9 @@ rm -rf $RPM_BUILD_ROOT
 	DESTDIR=$RPM_BUILD_ROOT \
 	TLP_SBIN=%{_sbindir} \
 	TLP_BIN=%{_bindir} \
-	TLP_TLIB=%{_libdir}/tlp-pm \
-	TLP_PLIB=%{_libdir}/pm-utils \
+	TLP_FLIB=%{_datadir}/tlp/func.d \
+	TLP_TLIB=%{_datadir}/tlp \
 	TLP_ULIB=/lib/udev \
-	TLP_ACPI=/etc/acpi \
 	TLP_NMDSP=/etc/NetworkManager/dispatcher.d \
 	TLP_CONF=/etc/default/tlp \
 	TLP_SHCPL=%{bash_compdir}
@@ -76,7 +75,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc README
+%doc AUTHORS changelog README.md
 %config(noreplace) %verify(not md5 mtime size) /etc/default/tlp
 /lib/udev/rules.d/85-tlp.rules
 %attr(755,root,root) /lib/udev/tlp-usb-udev
@@ -96,16 +95,15 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/wwan.1*
 %{_mandir}/man8/tlp.8*
 %{_mandir}/man8/tlp-stat.8*
-%attr(755,root,root) %{_libdir}/pm-utils/sleep.d/49tlp
-%dir %{_libdir}/tlp-pm
-%attr(755,root,root) %{_libdir}/tlp-pm/tlp-functions
-%attr(755,root,root) %{_libdir}/tlp-pm/tlp-nop
-%attr(755,root,root) %{_libdir}/tlp-pm/tlp-rf-func
-%attr(755,root,root) %{_libdir}/tlp-pm/tpacpi-bat
 %{systemdtmpfilesdir}/%{name}.conf
 %{systemdunitdir}/tlp.service
 %{systemdunitdir}/tlp-sleep.service
 %dir %{_varrun}/%{name}
+%dir %{_datadir}/tlp
+%attr(755,root,root) %{_datadir}/tlp/tlp-func-base
+%attr(755,root,root) %{_datadir}/tlp/tpacpi-bat
+%{_datadir}/tlp/func.d
+%{_datadir}/metainfo/de.linrunner.tlp.metainfo.xml
 
 %files -n bash-completion-%{name}
 %defattr(644,root,root,755)
