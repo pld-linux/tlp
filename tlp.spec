@@ -3,12 +3,12 @@
 # /etc/init.d/tlp
 Summary:	Power management tool for Linux
 Name:		tlp
-Version:	1.2.1
+Version:	1.2.2
 Release:	1
 License:	GPL v2
 Group:		Base
 Source0:	https://github.com/linrunner/TLP/archive/%{version}.tar.gz?/%{name}-%{version}.tar.gz
-# Source0-md5:	6bb4404a3ad83905fe8feaed87bad33c
+# Source0-md5:	23dc1b2edcf4d01a37c67b12f023df22
 Source1:	%{name}.tmpfiles
 URL:		http://linrunner.de/en/tlp/tlp.html
 BuildRequires:	rpmbuild(macros) >= 1.673
