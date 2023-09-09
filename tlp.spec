@@ -4,7 +4,7 @@
 Summary:	Power management tool for Linux
 Name:		tlp
 Version:	1.6.0
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Base
 Source0:	https://github.com/linrunner/TLP/archive/%{version}.tar.gz?/%{name}-%{version}.tar.gz
@@ -39,6 +39,9 @@ This package provides bash-completion for tlp.
 
 %prep
 %setup -q -n TLP-%{version}
+
+# All scripts here are bash scripts
+find ./ -type f -print0 | xargs -0 %{__sed} -i -e '1s,/bin/sh$,%{__bash},'
 
 %install
 rm -rf $RPM_BUILD_ROOT
