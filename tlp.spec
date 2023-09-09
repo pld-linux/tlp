@@ -3,12 +3,12 @@
 # /etc/init.d/tlp
 Summary:	Power management tool for Linux
 Name:		tlp
-Version:	1.3.1
+Version:	1.6.0
 Release:	1
 License:	GPL v2
 Group:		Base
 Source0:	https://github.com/linrunner/TLP/archive/%{version}.tar.gz?/%{name}-%{version}.tar.gz
-# Source0-md5:	d8db9a621141d4d1096974e93a27d698
+# Source0-md5:	7542d9171b1fa42a0b69d258cf1c35e1
 Source1:	%{name}.tmpfiles
 URL:		http://linrunner.de/en/tlp/tlp.html
 BuildRequires:	rpmbuild(macros) >= 1.673
@@ -20,6 +20,7 @@ Requires:	util-linux >= 2.31
 Requires:	wireless-tools
 Suggests:	bash-completion-%{name}
 Suggests:	smartmontools
+BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -72,7 +73,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS changelog README.md
+%doc AUTHORS changelog README.rst
 %config(noreplace) %verify(not md5 mtime size) /etc/tlp.conf
 %dir /etc/tlp.d
 %config(noreplace) %verify(not md5 mtime size) /etc/tlp.d/00-template.conf
@@ -80,6 +81,7 @@ rm -rf $RPM_BUILD_ROOT
 /lib/udev/rules.d/85-tlp.rules
 %attr(755,root,root) /lib/udev/tlp-usb-udev
 %attr(755,root,root) %{_bindir}/bluetooth
+%attr(755,root,root) %{_bindir}/nfc
 %attr(755,root,root) %{_bindir}/run-on-ac
 %attr(755,root,root) %{_bindir}/run-on-bat
 %attr(755,root,root) %{_bindir}/tlp-stat
@@ -96,20 +98,24 @@ rm -rf $RPM_BUILD_ROOT
 %{systemdtmpfilesdir}/%{name}.conf
 %{systemdunitdir}/tlp.service
 %attr(755,root,root) /lib/systemd/system-sleep/tlp
-%dir %{_varrun}/%{name}
+%dir /var/lib/%{name}
 %dir %{_datadir}/tlp
 %{_datadir}/tlp/defaults.conf
+%{_datadir}/tlp/deprecated.conf
+%{_datadir}/tlp/rename.conf
 %attr(755,root,root) %{_datadir}/tlp/tlp-func-base
 %attr(755,root,root) %{_datadir}/tlp/tlp-pcilist
 %attr(755,root,root) %{_datadir}/tlp/tlp-readconfs
 %attr(755,root,root) %{_datadir}/tlp/tlp-usblist
 %attr(755,root,root) %{_datadir}/tlp/tpacpi-bat
+%{_datadir}/tlp/bat.d
 %{_datadir}/tlp/func.d
 %{_datadir}/metainfo/de.linrunner.tlp.metainfo.xml
 
 %files -n bash-completion-%{name}
 %defattr(644,root,root,755)
 %{bash_compdir}/bluetooth
+%{bash_compdir}/nfc
 %{bash_compdir}/tlp
 %{bash_compdir}/tlp-stat
 %{bash_compdir}/wifi
