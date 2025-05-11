@@ -43,6 +43,7 @@ rm -rf $RPM_BUILD_ROOT
 	TLP_ULIB=/lib/udev \
 	TLP_NMDSP=/etc/NetworkManager/dispatcher.d \
 	TLP_SYSD=%{systemdunitdir} \
+	TLP_SDSL=/lib/systemd/system-sleep \
 	TLP_SHCPL=%{bash_compdir} \
 	TLP_FISHCPL=%{fish_compdir} \
 	TLP_ZSHCPL=%{zsh_compdir} \
@@ -91,7 +92,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/tlp.service.8*
 %{systemdtmpfilesdir}/%{name}.conf
 %{systemdunitdir}/tlp.service
-%attr(755,root,root) /usr/lib/systemd/system-sleep/tlp
+%attr(755,root,root) /lib/systemd/system-sleep/tlp
 %dir /var/lib/%{name}
 %dir %{_datadir}/tlp
 %{_datadir}/tlp/defaults.conf
