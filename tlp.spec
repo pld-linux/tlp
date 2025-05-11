@@ -3,12 +3,12 @@
 # /etc/init.d/tlp
 Summary:	Power management tool for Linux
 Name:		tlp
-Version:	1.6.0
-Release:	2
+Version:	1.8.0
+Release:	1
 License:	GPL v2
 Group:		Base
 Source0:	https://github.com/linrunner/TLP/archive/%{version}.tar.gz?/%{name}-%{version}.tar.gz
-# Source0-md5:	7542d9171b1fa42a0b69d258cf1c35e1
+# Source0-md5:	3e29a0e914f25c40c632ea4a49f6c0f3
 Source1:	%{name}.tmpfiles
 URL:		http://linrunner.de/en/tlp/tlp.html
 BuildRequires:	rpmbuild(macros) >= 1.673
@@ -18,8 +18,8 @@ Requires:	hdparm
 Requires:	pm-utils
 Requires:	util-linux >= 2.31
 Requires:	wireless-tools
-Suggests:	bash-completion-%{name}
 Suggests:	smartmontools
+Obsoletes:	bash-completion-tlp < 1.8.0
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -27,15 +27,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 TLP is a power management tool for Linux. It brings you the benefits
 of advanced power management without the need to understand every
 technical detail.
-
-%package -n bash-completion-%{name}
-Summary:	bash-completion for tlp
-Group:		Applications/Shells
-Requires:	bash-completion >= 2.0
-BuildArch:	noarch
-
-%description -n bash-completion-%{name}
-This package provides bash-completion for tlp.
 
 %prep
 %setup -q -n TLP-%{version}
@@ -45,7 +36,7 @@ find ./ -type f -print0 | xargs -0 %{__sed} -i -e '1s,/bin/sh$,%{__bash},'
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%{__make} install-tlp \
+%{__make} install-tlp install-man-tlp \
 	DESTDIR=$RPM_BUILD_ROOT \
 	TLP_SBIN=%{_sbindir} \
 	TLP_BIN=%{_bindir} \
@@ -53,13 +44,14 @@ rm -rf $RPM_BUILD_ROOT
 	TLP_TLIB=%{_datadir}/tlp \
 	TLP_ULIB=/lib/udev \
 	TLP_NMDSP=/etc/NetworkManager/dispatcher.d \
-	TLP_SHCPL=%{bash_compdir}
+	TLP_SYSD=%{systemdunitdir} \
+	TLP_SDSL=/lib/systemd/system-sleep \
+	TLP_SHCPL=%{bash_compdir} \
+	TLP_FISHCPL=%{fish_compdir} \
+	TLP_ZSHCPL=%{zsh_compdir} \
 
-install -d $RPM_BUILD_ROOT{%{_mandir}/{man1,man8},%{systemdtmpfilesdir},%{systemdunitdir}}
-cp -p man/{bluetooth,run-on-ac,run-on-bat,wifi,wwan}.1 $RPM_BUILD_ROOT%{_mandir}/man1
-cp -p man/{tlp,tlp-stat}.8 $RPM_BUILD_ROOT%{_mandir}/man8
+install -d $RPM_BUILD_ROOT%{systemdtmpfilesdir}
 
-cp -p tlp.service $RPM_BUILD_ROOT%{systemdunitdir}
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
 %clean
@@ -92,12 +84,14 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/wwan
 %attr(755,root,root) %{_sbindir}/tlp
 %{_mandir}/man1/bluetooth.1*
+%{_mandir}/man1/nfc.1*
 %{_mandir}/man1/run-on-ac.1*
 %{_mandir}/man1/run-on-bat.1*
 %{_mandir}/man1/wifi.1*
 %{_mandir}/man1/wwan.1*
 %{_mandir}/man8/tlp.8*
 %{_mandir}/man8/tlp-stat.8*
+%{_mandir}/man8/tlp.service.8*
 %{systemdtmpfilesdir}/%{name}.conf
 %{systemdunitdir}/tlp.service
 %attr(755,root,root) /lib/systemd/system-sleep/tlp
@@ -110,16 +104,29 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_datadir}/tlp/tlp-pcilist
 %attr(755,root,root) %{_datadir}/tlp/tlp-readconfs
 %attr(755,root,root) %{_datadir}/tlp/tlp-usblist
-%attr(755,root,root) %{_datadir}/tlp/tpacpi-bat
 %{_datadir}/tlp/bat.d
 %{_datadir}/tlp/func.d
 %{_datadir}/metainfo/de.linrunner.tlp.metainfo.xml
 
-%files -n bash-completion-%{name}
-%defattr(644,root,root,755)
 %{bash_compdir}/bluetooth
 %{bash_compdir}/nfc
+%{bash_compdir}/run-on-ac
+%{bash_compdir}/run-on-bat
 %{bash_compdir}/tlp
 %{bash_compdir}/tlp-stat
 %{bash_compdir}/wifi
 %{bash_compdir}/wwan
+
+%{fish_compdir}/bluetooth.fish
+%{fish_compdir}/nfc.fish
+%{fish_compdir}/run-on-ac.fish
+%{fish_compdir}/run-on-bat.fish
+%{fish_compdir}/tlp.fish
+%{fish_compdir}/tlp-stat.fish
+%{fish_compdir}/wifi.fish
+%{fish_compdir}/wwan.fish
+
+%{zsh_compdir}/_tlp
+%{zsh_compdir}/_tlp-radio-device
+%{zsh_compdir}/_tlp-run-on
+%{zsh_compdir}/_tlp-stat
