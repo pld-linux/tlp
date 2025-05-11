@@ -12,12 +12,10 @@ Source0:	https://github.com/linrunner/TLP/archive/%{version}.tar.gz?/%{name}-%{v
 Source1:	%{name}.tmpfiles
 URL:		http://linrunner.de/en/tlp/tlp.html
 BuildRequires:	rpmbuild(macros) >= 1.673
-Requires:	acpid
-Requires:	ethtool
 Requires:	hdparm
-Requires:	pm-utils
+Requires:	iw
 Requires:	util-linux >= 2.31
-Requires:	wireless-tools
+Suggests:	ethtool
 Suggests:	smartmontools
 Obsoletes:	bash-completion-tlp < 1.8.0
 BuildArch:	noarch
