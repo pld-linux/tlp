@@ -55,7 +55,7 @@ rm -rf $RPM_BUILD_ROOT
 	TLP_NMDSP=/etc/NetworkManager/dispatcher.d \
 	TLP_SHCPL=%{bash_compdir}
 
-install -d $RPM_BUILD_ROOT{%{_mandir}/{man1,man8},%{systemdtmpfilesdir},%{systemdunitdir},%{_varrun}/%{name}}
+install -d $RPM_BUILD_ROOT{%{_mandir}/{man1,man8},%{systemdtmpfilesdir},%{systemdunitdir}}
 cp -p man/{bluetooth,run-on-ac,run-on-bat,wifi,wwan}.1 $RPM_BUILD_ROOT%{_mandir}/man1
 cp -p man/{tlp,tlp-stat}.8 $RPM_BUILD_ROOT%{_mandir}/man8
 
